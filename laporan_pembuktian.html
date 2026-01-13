@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Pembuktian Rumus</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Times New Roman', serif; padding: 40px; color: #000; line-height: 1.5; }
+        .container { max-width: 210mm; margin: 0 auto; background: white; }
+        
+        h1 { font-size: 18pt; text-transform: uppercase; margin: 0; }
+        h2 { font-size: 14pt; border-bottom: 2px solid black; margin-top: 30px; padding-bottom: 5px; }
+        h3 { font-size: 12pt; font-weight: bold; margin-top: 25px; margin-bottom: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 11pt; }
+        th, td { border: 1px solid black; padding: 5px; text-align: center; }
+        th { background: #f0f0f0; }
+        td.left { text-align: left; }
+        
+        .calc-box { 
+            background: #f9f9f9; 
+            border: 1px dashed #666; 
+            padding: 10px; 
+            margin-bottom: 20px; 
+            font-size: 11pt; 
+            font-family: Arial, sans-serif;
+        }
+        .calc-title { font-weight: bold; text-decoration: underline; margin-bottom: 5px; display: block; }
+        .example-row { color: #000080; font-family: 'Courier New', monospace; font-weight: bold; }
+        
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div style="display: flex; justify-content: space-between; border-bottom: 3px double black; padding-bottom: 10px; margin-bottom: 20px;">
+            <div>
+                <h1>Laporan Analisis SPK</h1>
+                <i>Metode: Decision Tree & COPRAS</i>
+            </div>
+            <div style="text-align: right;">
+                <b>BINTANG JAYA MOTOR</b><br>
+                Honda Vario 150 | 55,000 km
+            </div>
+        </div>
+
+        <h2>I. HASIL DIAGNOSA (DECISION TREE)</h2>
+        <p>Proses inferensi C4.5 berdasarkan input:</p>
+        <div class="calc-box">
+            <span class="calc-title">Logika Penelusuran (Trace):</span>
+            1. <b>Input Gejala:</b> "Getaran CVT Parah"<br>
+            2. <b>Cek Aturan:</b> IF (Gejala == Berat) AND (Usia > 3 thn) THEN Risiko = Tinggi<br>
+            3. <b>Keputusan Akhir:</b> <span style="font-size: 14pt; font-weight: bold;">Sedang</span>
+        </div>
+
+        <h2>II. PERHITUNGAN MANUAL (COPRAS)</h2>
+
+        
+        
+        <h3>Tahap 1: Matriks Keputusan ($X$)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    
+                    <th>C1. Jenis Keluhan</th>
+                    
+                    <th>C2. Harga</th>
+                    
+                    <th>C3. Jarak Tempuh</th>
+                    
+                    <th>C4. Usia Kendaraan</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td class="left">Paket Standar</td>
+                    
+                    <td>4</td>
+                    
+                    <td>1</td>
+                    
+                    <td>3</td>
+                    
+                    <td>3</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Bulanan</td>
+                    
+                    <td>3</td>
+                    
+                    <td>1</td>
+                    
+                    <td>4</td>
+                    
+                    <td>4</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Lengkap</td>
+                    
+                    <td>4</td>
+                    
+                    <td>1</td>
+                    
+                    <td>3</td>
+                    
+                    <td>3</td>
+                    
+                </tr>
+                
+                <tr style="background:#eee; font-weight:bold;">
+                    <td class="left">TOTAL ($\sum X$)</td>
+                    
+                    <td>11</td>
+                    
+                    <td>3</td>
+                    
+                    <td>10</td>
+                    
+                    <td>10</td>
+                    
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Tahap 2: Normalisasi Matriks ($R$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Rumus & Implementasi Angka:</span>
+            $$ r_{ij} = \frac{x_{ij}}{\sum x_{ij}} $$
+            <span class="example-row">
+                Contoh (Baris 1, Kolom 1):<br>
+                r11 = 4 / 11 = 0.3636
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alt</th>
+                    
+                    <th>C1. Jenis Keluhan</th>
+                    
+                    <th>C2. Harga</th>
+                    
+                    <th>C3. Jarak Tempuh</th>
+                    
+                    <th>C4. Usia Kendaraan</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td class="left">Paket Standar</td>
+                    
+                    <td>0.3636</td>
+                    
+                    <td>0.3333</td>
+                    
+                    <td>0.3000</td>
+                    
+                    <td>0.3000</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Bulanan</td>
+                    
+                    <td>0.2727</td>
+                    
+                    <td>0.3333</td>
+                    
+                    <td>0.4000</td>
+                    
+                    <td>0.4000</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Lengkap</td>
+                    
+                    <td>0.3636</td>
+                    
+                    <td>0.3333</td>
+                    
+                    <td>0.3000</td>
+                    
+                    <td>0.3000</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <h3>Tahap 3: Normalisasi Terbobot ($D$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Rumus & Implementasi Angka:</span>
+            $$ y_{ij} = r_{ij} \times w_j $$
+            Bobot Kriteria ($w_j$) = [ 0.4, 0.3, 0.15, 0.15 ]<br><br>
+            <span class="example-row">
+                Contoh (Baris 1, Kolom 1):<br>
+                y11 = 0.3636 × 0.4 = 0.1455
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alt</th>
+                    
+                    <th>C1. Jenis Keluhan</th>
+                    
+                    <th>C2. Harga</th>
+                    
+                    <th>C3. Jarak Tempuh</th>
+                    
+                    <th>C4. Usia Kendaraan</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td class="left">Paket Standar</td>
+                    
+                    <td>0.1455</td>
+                    
+                    <td>0.1000</td>
+                    
+                    <td>0.0450</td>
+                    
+                    <td>0.0450</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Bulanan</td>
+                    
+                    <td>0.1091</td>
+                    
+                    <td>0.1000</td>
+                    
+                    <td>0.0600</td>
+                    
+                    <td>0.0600</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Lengkap</td>
+                    
+                    <td>0.1455</td>
+                    
+                    <td>0.1000</td>
+                    
+                    <td>0.0450</td>
+                    
+                    <td>0.0450</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <h3>Tahap 4: Nilai Max ($S_+$) & Min ($S_-$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Implementasi Angka (Alternatif 1 - Paket Standar):</span>
+            $$ S_+ = \sum \text{Benefit} \quad ; \quad S_- = \sum \text{Cost} $$
+            <span class="example-row">
+                S+ = (Kolom C1 + C2) = 0.1455 + 0.1000 = 0.2455<br>
+                S- = (Kolom C3 + C4) = 0.0450 + 0.0450 = 0.0900
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    <th>Benefit ($S_+$)</th>
+                    <th>Cost ($S_-$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td class="left">Paket Standar</td>
+                    <td>0.2455</td>
+                    <td>0.0900</td>
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Lengkap</td>
+                    <td>0.2455</td>
+                    <td>0.0900</td>
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Bulanan</td>
+                    <td>0.2091</td>
+                    <td>0.1200</td>
+                </tr>
+                
+                <tr style="background:#eee; font-weight:bold">
+                    <td class="left">TOTAL ($S_-$)</td>
+                    <td>-</td>
+                    <td>0.3000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Tahap 5: Bobot Relatif ($Q_i$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Rumus Lengkap:</span>
+            $$ Q_i = S_{+i} + \frac{\sum S_{-}}{S_{-i} \times \sum \frac{1}{S_{-}}} $$
+            
+            <span class="calc-title" style="margin-top:10px;">Data Global:</span>
+            • $\sum S_-$ = 0.3000<br>
+            • $\sum \frac{1}{S_-}$ = 30.5556<br><br>
+
+            <span class="example-row">
+                Implementasi (Alternatif 1):<br>
+                Q1 = 0.2455 + ( 0.3000 / ( 0.0900 × 30.5556 ) )<br>
+                Q1 = <b>0.3545</b>
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    <th>Bobot Relatif ($Q_i$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td class="left">Paket Standar</td>
+                    <td>0.3545</td>
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Lengkap</td>
+                    <td>0.3545</td>
+                </tr>
+                
+                <tr>
+                    <td class="left">Paket Servis Bulanan</td>
+                    <td>0.2909</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <h3>Tahap 6: Utilitas ($U_i$) & Perankingan</h3>
+        <div class="calc-box">
+            <span class="calc-title">Implementasi Angka:</span>
+            $$ U_i = \frac{Q_i}{Q_{max}} \times 100\% $$
+            <span class="example-row">
+                Q_max = 0.3545<br>
+                U1 = ( 0.3545 / 0.3545 ) × 100 = <b>100.00%</b>
+            </span>
+        </div>
+        
+        <table>
+            <thead>
+                <tr style="background:#333; color:white;">
+                    <th>Rank</th>
+                    <th>Alternatif</th>
+                    <th>Harga Asli</th>
+                    <th>Utilitas ($U_i$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td><b>#1</b></td>
+                    <td class="left"><b>Paket Standar</b></td>
+                    <td>Rp 150.000</td>
+                    <td><b>100.00%</b></td>
+                </tr>
+                
+                <tr>
+                    <td><b>#2</b></td>
+                    <td class="left"><b>Paket Servis Lengkap</b></td>
+                    <td>Rp 225.000</td>
+                    <td><b>100.00%</b></td>
+                </tr>
+                
+                <tr>
+                    <td><b>#3</b></td>
+                    <td class="left"><b>Paket Servis Bulanan</b></td>
+                    <td>Rp 185.000</td>
+                    <td><b>82.05%</b></td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        
+
+        <div class="no-print" style="text-align:center; margin-top:40px;">
+            <button onclick="window.print()" style="padding:10px 20px;">Cetak / Simpan PDF</button>
+        </div>
+
+    </div>
+</body>
+</html>

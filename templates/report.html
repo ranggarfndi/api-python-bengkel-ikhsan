@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Perhitungan Lengkap</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Times New Roman', serif; padding: 40px; color: #000; line-height: 1.5; font-size: 14px; }
+        .container { max-width: 210mm; margin: 0 auto; background: white; }
+        
+        h1 { font-size: 18pt; text-transform: uppercase; margin: 0; }
+        h2 { font-size: 14pt; border-bottom: 2px solid black; margin-top: 35px; padding-bottom: 5px; font-weight: bold; }
+        h3 { font-size: 12pt; font-weight: bold; margin-top: 25px; margin-bottom: 10px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        th, td { border: 1px solid black; padding: 6px 8px; text-align: center; }
+        th { background: #f0f0f0; }
+        td.left { text-align: left; }
+        
+        /* Kotak Perhitungan (Abu-abu) */
+        .calc-box { 
+            background: #f5f5f5; 
+            border: 1px dashed #666; 
+            padding: 12px; 
+            margin-bottom: 20px; 
+            font-size: 11pt; 
+            font-family: Arial, sans-serif;
+        }
+        .calc-title { font-weight: bold; text-decoration: underline; margin-bottom: 8px; display: block; font-size: 10pt; }
+        .example-row { color: #000; font-family: 'Courier New', monospace; font-weight: bold; display: block; margin-top: 5px; }
+        
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div style="display: flex; justify-content: space-between; border-bottom: 3px double black; padding-bottom: 10px; margin-bottom: 20px;">
+            <div>
+                <h1>Laporan Analisis SPK</h1>
+                <i>Metode: Decision Tree (C4.5) & COPRAS</i>
+            </div>
+            <div style="text-align: right;">
+                <b>BINTANG JAYA MOTOR</b><br>
+                {{ input_data.motor }} | {{ "{:,.0f}".format(input_data.km) }} km
+            </div>
+        </div>
+
+        <h2>I. HASIL DIAGNOSA (DECISION TREE)</h2>
+        
+        <h3>A. Fakta Input ($X$)</h3>
+        <table>
+            <tr>
+                <td class="left" width="25%"><b>Nama Kendaraan</b></td>
+                <td>{{ input_data.motor }}</td>
+                <td class="left" width="25%"><b>Jarak Tempuh</b></td>
+                <td>{{ "{:,.0f}".format(input_data.km) }} km</td>
+            </tr>
+            <tr>
+                <td class="left"><b>Usia Kendaraan</b></td>
+                <td>{{ input_data.usia }} Tahun</td>
+                <td class="left"><b>Gejala Utama</b></td>
+                <td><b>{{ input_data.gejala }}</b></td>
+            </tr>
+        </table>
+
+        <h3>B. Perhitungan Entropy (Contoh Sampel Node)</h3>
+        <p>Sistem menghitung ketidakmurnian data (Entropy) pada simpul gejala "{{ input_data.gejala }}".</p>
+        
+        <div class="calc-box">
+            <span class="calc-title">Rumus Entropy:</span>
+            $$ Entropy(S) = \sum_{i=1}^{c} -p_i \log_2 p_i $$
+            
+            <span class="calc-title" style="margin-top:10px;">Implementasi Angka (Sampel Distribusi Data):</span>
+            Misalkan dari {{ dt_debug.total }} data historis dengan gejala serupa:
+            <ul style="margin: 5px 0 10px 20px; font-size: 10pt;">
+                <li>3 Kasus Ringan ($p_1 = 0.3$)</li>
+                <li>5 Kasus Sedang ($p_2 = 0.5$)</li>
+                <li>2 Kasus Tinggi ($p_3 = 0.2$)</li>
+            </ul>
+
+            <span class="example-row">
+                E = - (0.3 × log2(0.3)) - (0.5 × log2(0.5)) - (0.2 × log2(0.2))<br>
+                E = - (0.3 × {{ "%.3f"|format(dt_debug.log_p1) }}) - (0.5 × {{ "%.3f"|format(dt_debug.log_p2) }}) - (0.2 × {{ "%.3f"|format(dt_debug.log_p3) }})<br>
+                E = - ({{ "%.3f"|format(0.3 * dt_debug.log_p1) }}) - ({{ "%.3f"|format(0.5 * dt_debug.log_p2) }}) - ({{ "%.3f"|format(0.2 * dt_debug.log_p3) }})<br>
+                E = <b>{{ "%.4f"|format(dt_debug.entropy) }}</b>
+            </span>
+        </div>
+
+        <h3>C. Hasil Inferensi (Trace Log)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tahapan</th>
+                    <th>Logika Sistem</th>
+                    <th>Keputusan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="left">Cek <b>Gejala Utama</b> pada Root Node</td>
+                    <td>Terdeteksi</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="left">Hitung Information Gain tertinggi dari atribut (Usia/KM)</td>
+                    <td>Cabang Usia</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="left">Validasi Rule: <i>IF Usia > 3 Tahun THEN Risk = High</i></td>
+                    <td><b>{{ kategori }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <h2>II. PERHITUNGAN REKOMENDASI (COPRAS)</h2>
+        <p>Perhitungan perankingan paket servis berdasarkan kriteria yang telah ditentukan.</p>
+
+        {% if debug %}
+        
+        <h3>Tahap 1: Matriks Keputusan ($X$)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    {% for label in debug.criteria_labels %}
+                    <th>{{ label }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in debug.matrix_raw %}
+                <tr>
+                    <td class="left">{{ debug.alternatives_names[loop.index0] }}</td>
+                    {% for val in row %}
+                    <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                <tr style="background:#eee; font-weight:bold;">
+                    <td class="left">TOTAL ($\sum X$)</td>
+                    {% for s in debug.col_sums %}
+                    <td>{{ "{:.0f}".format(s) }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Tahap 2: Normalisasi Matriks ($R$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Rumus & Implementasi Angka (Baris 1, Kolom 1):</span>
+            $$ r_{ij} = \frac{x_{ij}}{\sum_{i=1}^{m} x_{ij}} $$
+            <span class="example-row">
+                r11 = {{ debug.matrix_raw[0][0] }} / {{ "{:.0f}".format(debug.col_sums[0]) }} = <b>{{ "%.4f"|format(debug.matrix_norm[0][0]) }}</b>
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alt</th>
+                    {% for label in debug.criteria_labels %}
+                    <th>{{ label }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in debug.matrix_norm %}
+                <tr>
+                    <td class="left">{{ debug.alternatives_names[loop.index0] }}</td>
+                    {% for val in row %}
+                    <td>{{ "%.4f"|format(val) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Tahap 3: Normalisasi Terbobot ($D$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Rumus & Implementasi Angka (Baris 1, Kolom 1):</span>
+            $$ y_{ij} = r_{ij} \times w_j $$
+            Bobot ($w_1$) = {{ debug.weights[0] }}<br>
+            <span class="example-row">
+                y11 = {{ "%.4f"|format(debug.matrix_norm[0][0]) }} × {{ debug.weights[0] }} = <b>{{ "%.4f"|format(debug.matrix_weighted[0][0]) }}</b>
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alt</th>
+                    {% for label in debug.criteria_labels %}
+                    <th>{{ label }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in debug.matrix_weighted %}
+                <tr>
+                    <td class="left">{{ debug.alternatives_names[loop.index0] }}</td>
+                    {% for val in row %}
+                    <td>{{ "%.4f"|format(val) }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Tahap 4: Nilai Max ($S_+$) & Min ($S_-$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Implementasi Angka (Alternatif 1):</span>
+            $$ S_+ = \sum \text{Benefit} \quad ; \quad S_- = \sum \text{Cost} $$
+            <span class="example-row">
+                S+ = {{ "%.4f"|format(debug.matrix_weighted[0][0]) }} + {{ "%.4f"|format(debug.matrix_weighted[0][1]) }} = <b>{{ "%.4f"|format(rekomendasi[0].S_plus) }}</b><br>
+                S- = {{ "%.4f"|format(debug.matrix_weighted[0][2]) }} + {{ "%.4f"|format(debug.matrix_weighted[0][3]) }} = <b>{{ "%.4f"|format(rekomendasi[0].S_minus) }}</b>
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    <th>Benefit ($S_+$)</th>
+                    <th>Cost ($S_-$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in rekomendasi %}
+                <tr>
+                    <td class="left">{{ res.nama }}</td>
+                    <td>{{ "%.4f"|format(res.S_plus) }}</td>
+                    <td>{{ "%.4f"|format(res.S_minus) }}</td>
+                </tr>
+                {% endfor %}
+                <tr style="background:#eee; font-weight:bold">
+                    <td class="left">TOTAL ($S_-$)</td>
+                    <td>-</td>
+                    <td>{{ "%.4f"|format(debug.sum_S_minus) }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Tahap 5: Bobot Relatif ($Q_i$)</h3>
+        <div class="calc-box">
+            <span class="calc-title">Implementasi Angka (Alternatif 1):</span>
+            $$ Q_i = S_{+i} + \frac{\sum S_{-}}{S_{-i} \times \sum \frac{1}{S_{-}}} $$
+            <span class="example-row">
+                Q1 = {{ "%.4f"|format(rekomendasi[0].S_plus) }} + ( {{ "%.4f"|format(debug.sum_S_minus) }} / ( {{ "%.4f"|format(rekomendasi[0].S_minus) }} × {{ "%.4f"|format(debug.sum_inv_S_minus) }} ) )<br>
+                Q1 = <b>{{ "%.4f"|format(rekomendasi[0].Q_i) }}</b>
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    <th>Nilai $Q_i$</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in rekomendasi %}
+                <tr>
+                    <td class="left">{{ res.nama }}</td>
+                    <td>{{ "%.4f"|format(res.Q_i) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Tahap 6: Utilitas ($U_i$) & Perankingan</h3>
+        <div class="calc-box">
+            <span class="calc-title">Implementasi Angka (Alternatif 1):</span>
+            $$ U_i = \frac{Q_i}{Q_{max}} \times 100\% $$
+            <span class="example-row">
+                U1 = ( {{ "%.4f"|format(rekomendasi[0].Q_i) }} / {{ "%.4f"|format(debug.Q_max) }} ) × 100 = <b>{{ "%.2f"|format(rekomendasi[0]['Utility (U_i)']) }}%</b>
+            </span>
+        </div>
+        <table>
+            <thead>
+                <tr style="background:#333; color:white;">
+                    <th>Rank</th>
+                    <th>Alternatif</th>
+                    <th>Harga Asli</th>
+                    <th>Skor Akhir ($U_i$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for res in rekomendasi %}
+                <tr>
+                    <td><b>#{{ loop.index }}</b></td>
+                    <td class="left"><b>{{ res.nama }}</b></td>
+                    <td style="text-align:right;">Rp {{ "{:,.0f}".format(res.harga_asli).replace(',', '.') }}</td>
+                    <td><b>{{ "%.2f"|format(res['Utility (U_i)']) }}%</b></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% endif %}
+
+        <div class="no-print" style="text-align:center; margin-top:40px;">
+            <button onclick="window.print()" style="padding:10px 20px; font-weight:bold;">Cetak Laporan PDF</button>
+        </div>
+
+    </div>
+</body>
+</html>

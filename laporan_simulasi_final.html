@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Simulasi SPK (Final)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .math-box { background: #f8fafc; padding: 1rem; border-left: 4px solid #2563eb; margin: 1rem 0; overflow-x: auto; }
+        @media print { .no-print { display: none; } }
+    </style>
+</head>
+<body class="bg-gray-100 text-slate-800 p-8 font-sans">
+    <div class="max-w-6xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+        
+        <div class="bg-slate-900 text-white p-6 border-b-4 border-orange-500 flex justify-between">
+            <div>
+                <h1 class="text-2xl font-bold uppercase">Laporan Analisis Sistem</h1>
+                <p class="text-xs text-slate-400">Metode: Decision Tree (C4.5) & COPRAS</p>
+            </div>
+            <div class="text-right">
+                <div class="font-bold text-orange-400">BINTANG JAYA MOTOR</div>
+            </div>
+        </div>
+
+        <div class="p-8">
+            <div class="mb-10">
+                <h2 class="font-bold text-xl mb-4 border-l-4 border-blue-600 pl-3">I. Diagnosa Kerusakan (Decision Tree)</h2>
+                <p class="text-sm text-slate-600 mb-2">Sistem menggunakan algoritma C4.5 untuk mengklasifikasikan tingkat kerusakan berdasarkan gejala.</p>
+                
+                <div class="math-box text-sm">
+                    <strong>Rumus Entropy (Ketidakmurnian Data):</strong>
+                    $$ Entropy(S) = \sum_{i=1}^{c} -p_i \log_2 p_i $$
+                    <span class="block mt-2 text-xs text-slate-500">Dimana $p_i$ adalah probabilitas dari setiap kelas (Ringan/Sedang/Tinggi).</span>
+                </div>
+
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded mt-4">
+                    <span class="text-sm font-bold text-slate-500 uppercase">Hasil Klasifikasi AI:</span>
+                    <span class="ml-2 text-2xl font-bold text-blue-800 uppercase tracking-widest">Sedang</span>
+                </div>
+            </div>
+
+            <hr class="my-8">
+
+            <div>
+                <h2 class="font-bold text-xl mb-4 border-l-4 border-green-600 pl-3">II. Rekomendasi Paket (COPRAS)</h2>
+                <p class="text-sm text-slate-600 mb-4">Perhitungan perankingan paket servis berdasarkan bobot kriteria: C1 (40%), C2 (30%), C3 (15%), C4 (15%).</p>
+
+                
+                
+                <h3 class="font-bold text-slate-700 mt-6 mb-2">A. Matriks Keputusan (X)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-slate-300">
+                        <thead class="bg-slate-100 uppercase text-xs">
+                            <tr>
+                                <th class="border p-2">Alternatif</th>
+                                
+                                <th class="border p-2 text-center bg-blue-50">C1. Jenis Keluhan</th>
+                                
+                                <th class="border p-2 text-center bg-blue-50">C2. Harga</th>
+                                
+                                <th class="border p-2 text-center bg-blue-50">C3. Jarak Tempuh</th>
+                                
+                                <th class="border p-2 text-center bg-blue-50">C4. Usia Kendaraan</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Standar</td>
+                                
+                                <td class="border p-2 text-center font-bold">4</td>
+                                
+                                <td class="border p-2 text-center font-bold">1</td>
+                                
+                                <td class="border p-2 text-center font-bold">3</td>
+                                
+                                <td class="border p-2 text-center font-bold">3</td>
+                                
+                            </tr>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Servis Bulanan</td>
+                                
+                                <td class="border p-2 text-center font-bold">3</td>
+                                
+                                <td class="border p-2 text-center font-bold">1</td>
+                                
+                                <td class="border p-2 text-center font-bold">4</td>
+                                
+                                <td class="border p-2 text-center font-bold">4</td>
+                                
+                            </tr>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Servis Lengkap</td>
+                                
+                                <td class="border p-2 text-center font-bold">4</td>
+                                
+                                <td class="border p-2 text-center font-bold">1</td>
+                                
+                                <td class="border p-2 text-center font-bold">3</td>
+                                
+                                <td class="border p-2 text-center font-bold">3</td>
+                                
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="font-bold text-slate-700 mt-6 mb-2">B. Normalisasi Matriks (R)</h3>
+                <div class="math-box text-xs mb-2">$$ r_{ij} = \frac{x_{ij}}{\sum_{i=1}^{m} x_{ij}} $$</div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-slate-300">
+                        <thead class="bg-slate-100 uppercase text-xs">
+                            <tr>
+                                <th class="border p-2">Alternatif</th>
+                                
+                                <th class="border p-2 text-center">C1. Jenis Keluhan</th>
+                                
+                                <th class="border p-2 text-center">C2. Harga</th>
+                                
+                                <th class="border p-2 text-center">C3. Jarak Tempuh</th>
+                                
+                                <th class="border p-2 text-center">C4. Usia Kendaraan</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Standar</td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3636
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3333
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3000
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3000
+                                </td>
+                                
+                            </tr>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Servis Bulanan</td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.2727
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3333
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.4000
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.4000
+                                </td>
+                                
+                            </tr>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Servis Lengkap</td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3636
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3333
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3000
+                                </td>
+                                
+                                <td class="border p-2 text-center text-slate-500 font-mono text-xs">
+                                    0.3000
+                                </td>
+                                
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="font-bold text-slate-700 mt-6 mb-2">C. Matriks Terbobot (D)</h3>
+                <div class="math-box text-xs mb-2">$$ y_{ij} = r_{ij} \times w_j $$</div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-slate-300">
+                        <thead class="bg-slate-100 uppercase text-xs">
+                            <tr>
+                                <th class="border p-2">Alternatif</th>
+                                
+                                <th class="border p-2 text-center font-bold text-blue-700">C1. Jenis Keluhan</th>
+                                
+                                <th class="border p-2 text-center font-bold text-blue-700">C2. Harga</th>
+                                
+                                <th class="border p-2 text-center font-bold text-blue-700">C3. Jarak Tempuh</th>
+                                
+                                <th class="border p-2 text-center font-bold text-blue-700">C4. Usia Kendaraan</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Standar</td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.1455
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.1000
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.0450
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.0450
+                                </td>
+                                
+                            </tr>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Servis Bulanan</td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.1091
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.1000
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.0600
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.0600
+                                </td>
+                                
+                            </tr>
+                            
+                            <tr class="hover:bg-slate-50">
+                                <td class="border p-2 font-bold">Paket Servis Lengkap</td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.1455
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.1000
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.0450
+                                </td>
+                                
+                                <td class="border p-2 text-center font-bold text-blue-600 font-mono text-xs">
+                                    0.0450
+                                </td>
+                                
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="font-bold text-slate-700 mt-6 mb-2">D. Perhitungan Qi & Ranking Akhir</h3>
+                <div class="math-box text-xs mb-2">
+                    $$ Q_i = S_{+i} + \frac{\sum S_{-}}{S_{-i} \times \sum \frac{1}{S_{-}}} \quad ; \quad U_i = \frac{Q_i}{Q_{max}} \times 100\% $$
+                </div>
+                <div class="overflow-x-auto rounded shadow border border-slate-300">
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-800 text-white">
+                            <tr>
+                                <th class="p-3 text-center">Rank</th>
+                                <th class="p-3">Paket Servis</th>
+                                <th class="p-3 text-right text-green-200">Benefit (S+)</th>
+                                <th class="p-3 text-right text-red-200">Cost (S-)</th>
+                                <th class="p-3 text-right">Nilai Qi</th>
+                                <th class="p-3 text-right bg-orange-600">Utilitas (Ui)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                            <tr class="bg-yellow-50 border-b">
+                                <td class="p-3 text-center font-bold">#1</td>
+                                <td class="p-3 font-semibold">
+                                    Paket Standar
+                                    <div class="text-xs font-normal text-slate-500">
+                                        Rp 150.000
+                                    </div>
+                                </td>
+                                <td class="p-3 text-right text-green-600 font-mono">0.2455</td>
+                                <td class="p-3 text-right text-red-600 font-mono">0.0900</td>
+                                <td class="p-3 text-right font-mono font-bold">0.3545</td>
+                                <td class="p-3 text-right font-bold text-lg text-orange-600">
+                                    100.00%
+                                </td>
+                            </tr>
+                            
+                            <tr class="bg-white border-b">
+                                <td class="p-3 text-center font-bold">#2</td>
+                                <td class="p-3 font-semibold">
+                                    Paket Servis Lengkap
+                                    <div class="text-xs font-normal text-slate-500">
+                                        Rp 225.000
+                                    </div>
+                                </td>
+                                <td class="p-3 text-right text-green-600 font-mono">0.2455</td>
+                                <td class="p-3 text-right text-red-600 font-mono">0.0900</td>
+                                <td class="p-3 text-right font-mono font-bold">0.3545</td>
+                                <td class="p-3 text-right font-bold text-lg text-blue-900">
+                                    100.00%
+                                </td>
+                            </tr>
+                            
+                            <tr class="bg-white border-b">
+                                <td class="p-3 text-center font-bold">#3</td>
+                                <td class="p-3 font-semibold">
+                                    Paket Servis Bulanan
+                                    <div class="text-xs font-normal text-slate-500">
+                                        Rp 185.000
+                                    </div>
+                                </td>
+                                <td class="p-3 text-right text-green-600 font-mono">0.2091</td>
+                                <td class="p-3 text-right text-red-600 font-mono">0.1200</td>
+                                <td class="p-3 text-right font-mono font-bold">0.2909</td>
+                                <td class="p-3 text-right font-bold text-lg text-blue-900">
+                                    82.05%
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+
+            <div class="mt-12 text-center border-t pt-6 no-print">
+                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 px-6 rounded shadow transition">
+                    🖨️ Cetak PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

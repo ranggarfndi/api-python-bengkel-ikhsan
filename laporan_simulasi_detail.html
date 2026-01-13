@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan Hasil Analisis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: 'Times New Roman', Times, serif; color: #000; }
+        .page-container { max-width: 210mm; margin: 0 auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1, h2, h3 { font-family: Arial, Helvetica, sans-serif; }
+        
+        /* Tabel Formal */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 14px; }
+        th, td { border: 1px solid #333; padding: 8px; }
+        th { background-color: #f0f0f0; text-align: center; font-weight: bold; }
+        td { vertical-align: middle; }
+        
+        /* Kotak Rumus */
+        .formula-box { border: 1px solid #ccc; padding: 10px; background: #fafafa; margin: 10px 0; font-family: Arial, sans-serif; font-size: 13px; }
+        
+        /* Section Divider */
+        .section-title { border-bottom: 2px solid #000; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; font-size: 18px; font-weight: bold; text-transform: uppercase; }
+        
+        /* Step Number COPRAS */
+        .step-label { font-weight: bold; margin-top: 20px; margin-bottom: 5px; display: block; font-family: Arial, sans-serif; }
+
+        @media print {
+            body { background: white; }
+            .page-container { box-shadow: none; padding: 0; width: 100%; }
+            .no-print { display: none; }
+            button { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+
+    <div class="page-container">
+        
+        <div class="flex justify-between items-end border-b-4 border-double border-black pb-4 mb-6">
+            <div>
+                <h1 class="text-2xl font-bold uppercase">Laporan Analisis SPK</h1>
+                <p class="text-sm">Metode: Decision Tree (C4.5) & COPRAS</p>
+            </div>
+            <div class="text-right">
+                <h2 class="text-xl font-bold">BINTANG JAYA MOTOR</h2>
+                <p class="text-xs">Tanggal Cetak: <script>document.write(new Date().toLocaleDateString('id-ID'))</script></p>
+            </div>
+        </div>
+
+        <div class="section-title">I. Diagnosa Kerusakan (Decision Tree)</div>
+        
+        <h3 class="font-bold text-sm mb-2 font-sans">A. Data Masukan (Fakta)</h3>
+        <table>
+            <tr>
+                <td class="bg-gray-100 w-1/4"><b>Nama Kendaraan</b></td>
+                <td>Honda Vario 150</td>
+                <td class="bg-gray-100 w-1/4"><b>Jarak Tempuh</b></td>
+                <td>55,000 km</td>
+            </tr>
+            <tr>
+                <td class="bg-gray-100"><b>Usia Kendaraan</b></td>
+                <td>5 Tahun</td>
+                <td class="bg-gray-100"><b>Gejala Utama</b></td>
+                <td><b>Getaran CVT Parah</b></td>
+            </tr>
+        </table>
+
+        <h3 class="font-bold text-sm mb-2 font-sans">B. Dasar Perhitungan (Entropy)</h3>
+        <div class="formula-box">
+            <p>Sistem menggunakan algoritma C4.5 dengan rumus Entropy untuk mengukur ketidakpastian data:</p>
+            $$ Entropy(S) = \sum_{i=1}^{c} -p_i \log_2 p_i $$
+            <p class="mt-2 text-xs text-gray-600">
+                Dimana <b>S</b> adalah himpunan kasus, <b>c</b> adalah jumlah kelas target, dan <b>pi</b> adalah proporsi kasus.
+            </p>
+        </div>
+
+        <h3 class="font-bold text-sm mb-2 font-sans">C. Alur Penelusuran Keputusan</h3>
+        <table style="width: 100%;">
+            <thead>
+                <tr>
+                    <th style="width: 50px;">No</th>
+                    <th style="text-align: left;">Tahapan Logika</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">1</td>
+                    <td>Mengecek <b>Gejala Utama</b> pada database pengetahuan.</td>
+                    <td class="text-center">Teridentifikasi</td>
+                </tr>
+                <tr>
+                    <td class="text-center">2</td>
+                    <td>Memvalidasi aturan: <i>IF (Usia > 3 thn) AND (Gejala = Getaran CVT Parah)</i>.</td>
+                    <td class="text-center">Valid</td>
+                </tr>
+                <tr>
+                    <td class="text-center">3</td>
+                    <td>Menentukan Kelas Kerusakan (Leaf Node).</td>
+                    <td class="text-center"><b>Sedang</b></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="border p-4 text-center mt-4 bg-gray-50">
+            <span class="text-sm font-bold uppercase block text-gray-500">Hasil Kesimpulan Diagnosa:</span>
+            <span class="text-2xl font-bold uppercase text-black tracking-widest">Sedang</span>
+        </div>
+
+
+        <div class="section-title">II. Perhitungan Rekomendasi (COPRAS)</div>
+
+        
+        
+        <span class="step-label">1. Menyiapkan Atribut Identifikasi (Matriks Keputusan X)</span>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    
+                    <th>C1. Jenis Keluhan</th>
+                    
+                    <th>C2. Harga</th>
+                    
+                    <th>C3. Jarak Tempuh</th>
+                    
+                    <th>C4. Usia Kendaraan</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Paket Standar</td>
+                    
+                    <td class="text-center">4</td>
+                    
+                    <td class="text-center">1</td>
+                    
+                    <td class="text-center">3</td>
+                    
+                    <td class="text-center">3</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Bulanan</td>
+                    
+                    <td class="text-center">3</td>
+                    
+                    <td class="text-center">1</td>
+                    
+                    <td class="text-center">4</td>
+                    
+                    <td class="text-center">4</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Lengkap</td>
+                    
+                    <td class="text-center">4</td>
+                    
+                    <td class="text-center">1</td>
+                    
+                    <td class="text-center">3</td>
+                    
+                    <td class="text-center">3</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <span class="step-label">2. Normalisasi Matriks (R)</span>
+        <div class="formula-box" style="margin-top:0; padding:5px;">$$ r_{ij} = x_{ij} / \sum x_{ij} $$</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    
+                    <th>C1. Jenis Keluhan</th>
+                    
+                    <th>C2. Harga</th>
+                    
+                    <th>C3. Jarak Tempuh</th>
+                    
+                    <th>C4. Usia Kendaraan</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Paket Standar</td>
+                    
+                    <td class="text-center">0.3636</td>
+                    
+                    <td class="text-center">0.3333</td>
+                    
+                    <td class="text-center">0.3000</td>
+                    
+                    <td class="text-center">0.3000</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Bulanan</td>
+                    
+                    <td class="text-center">0.2727</td>
+                    
+                    <td class="text-center">0.3333</td>
+                    
+                    <td class="text-center">0.4000</td>
+                    
+                    <td class="text-center">0.4000</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Lengkap</td>
+                    
+                    <td class="text-center">0.3636</td>
+                    
+                    <td class="text-center">0.3333</td>
+                    
+                    <td class="text-center">0.3000</td>
+                    
+                    <td class="text-center">0.3000</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <span class="step-label">3. Normalisasi Matriks Terbobot (D)</span>
+        <div class="formula-box" style="margin-top:0; padding:5px;">$$ y_{ij} = r_{ij} \times w_j $$</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    
+                    <th>C1. Jenis Keluhan</th>
+                    
+                    <th>C2. Harga</th>
+                    
+                    <th>C3. Jarak Tempuh</th>
+                    
+                    <th>C4. Usia Kendaraan</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Paket Standar</td>
+                    
+                    <td class="text-center font-bold">0.1455</td>
+                    
+                    <td class="text-center font-bold">0.1000</td>
+                    
+                    <td class="text-center font-bold">0.0450</td>
+                    
+                    <td class="text-center font-bold">0.0450</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Bulanan</td>
+                    
+                    <td class="text-center font-bold">0.1091</td>
+                    
+                    <td class="text-center font-bold">0.1000</td>
+                    
+                    <td class="text-center font-bold">0.0600</td>
+                    
+                    <td class="text-center font-bold">0.0600</td>
+                    
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Lengkap</td>
+                    
+                    <td class="text-center font-bold">0.1455</td>
+                    
+                    <td class="text-center font-bold">0.1000</td>
+                    
+                    <td class="text-center font-bold">0.0450</td>
+                    
+                    <td class="text-center font-bold">0.0450</td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <span class="step-label">4. Hitung Nilai Maksimal (S+) dan Minimal (S-)</span>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    <th>Maksimal Indeks (S+)</th>
+                    <th>Minimal Indeks (S-)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Paket Standar</td>
+                    <td class="text-center">0.24545</td>
+                    <td class="text-center">0.09000</td>
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Lengkap</td>
+                    <td class="text-center">0.24545</td>
+                    <td class="text-center">0.09000</td>
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Bulanan</td>
+                    <td class="text-center">0.20909</td>
+                    <td class="text-center">0.12000</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <span class="step-label">5. Hitung Bobot Relatif (Qi)</span>
+        <table>
+            <thead>
+                <tr>
+                    <th>Alternatif</th>
+                    <th>Nilai Bobot Relatif (Qi)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Paket Standar</td>
+                    <td class="text-center font-bold">0.35455</td>
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Lengkap</td>
+                    <td class="text-center font-bold">0.35455</td>
+                </tr>
+                
+                <tr>
+                    <td>Paket Servis Bulanan</td>
+                    <td class="text-center font-bold">0.29091</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        <span class="step-label">6. Hitung Utilitas Kuantitatif (Ui) & Perankingan</span>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 50px;">Rank</th>
+                    <th>Alternatif Paket</th>
+                    <th>Estimasi Biaya</th>
+                    <th>Utilitas (Ui)</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td class="text-center"><b>1</b></td>
+                    <td>Paket Standar</td>
+                    <td class="text-right">Rp 150.000</td>
+                    <td class="text-center font-bold">100.00%</td>
+                </tr>
+                
+                <tr>
+                    <td class="text-center"><b>2</b></td>
+                    <td>Paket Servis Lengkap</td>
+                    <td class="text-right">Rp 225.000</td>
+                    <td class="text-center font-bold">100.00%</td>
+                </tr>
+                
+                <tr>
+                    <td class="text-center"><b>3</b></td>
+                    <td>Paket Servis Bulanan</td>
+                    <td class="text-right">Rp 185.000</td>
+                    <td class="text-center font-bold">82.05%</td>
+                </tr>
+                
+            </tbody>
+        </table>
+
+        
+
+        <div class="mt-8 text-center no-print">
+            <button onclick="window.print()" class="bg-black text-white px-6 py-2 rounded font-sans font-bold hover:bg-gray-800">
+                Cetak Dokumen
+            </button>
+        </div>
+
+    </div>
+
+</body>
+</html>
